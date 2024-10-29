@@ -96,15 +96,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         results.sort((a, b) => b.score - a.score);
         const topResult = results[0];
-        const secondResult = results[1];
+        const secondResult = results[1];    
 
         const potentialMatches = birdMatches[topResult.type];
         const birdMatch = potentialMatches.includes(secondResult.type) ? secondResult.type : potentialMatches[0];
-
+        const visitorCountImage = 12345;
         const languagePrefix = selectedLanguage === 'english' ? 'eng' : 'vie';
         overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
         overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
-        overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, 12345, 'VisitorCountImage');
+        overlayVisitorCountOnImage(`${languagePrefix}-visitor-${visitorCountImage}.png`, 12345, "VisitorCountImage");
     }
 
     function overlayVisitorCountOnImage(imagePath, visitorCount, imageLabel) {
