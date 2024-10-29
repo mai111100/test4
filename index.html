@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enneagram Quiz</title>
+    <link rel="stylesheet" href="quiz.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Enneagram Quiz</h1>
+
+        <!-- Language selection before the quiz starts -->
+        <div id="language-selection">
+            <p>Do you prefer to take the journey in English or Vietnamese? - Bạn muốn bắt đầu hành trình bằng tiếng Việt hay tiếng Anh?</p>
+            <button class="language-button" data-language="english">English</button>
+            <button class="language-button" data-language="vietnamese">Vietnamese</button>
+        </div>
+
+        <!-- Question container where questions will be displayed -->
+        <div id="question-container" style="display:none;">
+            <p id="question"></p>
+            <div id="choices"></div>
+            <button id="done-button" style="display: none;">Done</button>
+        </div>
+
+        <!-- Name entry field for test taker after the quiz -->
+        <div id="name-entry" style="display: none;">
+            <p>Enter your name:</p>
+            <input type="text" id="test-taker-name" placeholder="Your name" required>
+            <button id="submit-name">Submit</button>
+        </div>
+    </div>
+
+    <!-- Result container where the result will be shown -->
+    <div id="result-container" style="display: none;">
+        <h2>Your Personality Result</h2>
+        <div id="result"></div> <!-- Placeholder for result images and download links -->
+    </div>
+
+    <script src="quiz.js"></script> <!-- Link to the JavaScript file -->
+</body>
+</html>
