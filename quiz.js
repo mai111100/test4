@@ -83,12 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Please enter your name.");
                 return;
             }
+
             displayResult(testName);
         });
     }
 
     function fetchVisitorCount() {
-        return fetch('YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') // Replace with your Apps Script URL
+        return fetch('https://script.google.com/macros/s/AKfycbysJBbFrmbNy-RWFlXYOqMTxaCXGOz19EUVXyPq3vG-4oEAQatHlG_mwuKy3SQMq04L/exec') // Replace with your Apps Script URL
             .then(response => response.json())
             .then(data => data.visitorCount) // Adjust according to how you send data from Apps Script
             .catch(error => {
@@ -116,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchVisitorCount().then(visitorCount => {
             overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
             overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
-            overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, visitorCount, 'VisitorCountImage');
+            overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, 124523, 'VisitorCountImage');
         });
     }
 
