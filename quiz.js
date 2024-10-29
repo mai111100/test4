@@ -88,22 +88,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function displayResult(testTakerName) {
+        // Track quiz completion event
+        gtag('event', 'quiz_completion', {
+            'event_category': 'Quiz',
+            'event_label': 'Enneagram Quiz',
+            'value': 1
+        });
+    
+        // Your existing result display code
         const results = [
             { type: "weaver", score: weaverScore },
             { type: "pelican", score: pelicanScore },
             // ...add other types and their scores...
         ];
-
+    
+        // Sort and find the top result
         results.sort((a, b) => b.score - a.score);
         const topResult = results[0];
         const secondResult = results[1];
-
+    
         const potentialMatches = birdMatches[topResult.type];
         const birdMatch = potentialMatches.includes(secondResult.type) ? secondResult.type : potentialMatches[0];
-
+    
         const languagePrefix = selectedLanguage === 'english' ? 'eng' : 'vie';
         overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
         overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
+    
+        // Display visitor count
+        displayVisitorCount();
     }
 
     function overlayNameOnImage(imagePath, testTakerName, imageLabel) {
