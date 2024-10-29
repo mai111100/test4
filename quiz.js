@@ -87,6 +87,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function getVisitorCount() {
+        const sheet = SpreadsheetApp.openById('1Y85tUj1fRef5CFIeS_l-XWnqMT0TRILAFLhJ0Tb4b_o').getActiveSheet();
+        const visitorCount = sheet.getRange('A1').getValue(); // Assuming the count is in cell A1
+        return visitorCount;
+      }
+      
+
     function displayResult(testTakerName) {
         const results = [
             { type: "weaver", score: weaverScore },
@@ -128,7 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const xPositionTopLeft = 50;
             const yPositionTopLeft = 50;
             ctx.textAlign = 'left';
-            ctx.fillText("No. 1", xPositionTopLeft, yPositionTopLeft);
+            visitor = getVisitorCount()
+
+            ctx.fillText(`No: ${visitor}`, xPositionTopLeft, yPositionTopLeft);
 
             // Add test-taker's name in the bottom-right of the first section
             const xPositionName = canvas.width - 50;
