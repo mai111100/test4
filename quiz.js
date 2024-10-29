@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Scores for each personality (bird type)
     let weaverScore = 0, pelicanScore = 0, flycatcherScore = 0, owlScore = 0;
     let crowScore = 0, craneScore = 0, parakeetScore = 0, eagleScore = 0, pigeonScore = 0;
-
+    let quizTakerCount = 0;
+    
     // English and Vietnamese questions
     const englishQuestions = [
         { question: "You start your journey over the seashore...", choices: ["Imma start anyways...", "Nah, no need to mess up..."], weights: [{ flycatcherScore: 1 }, { crowScore: 1 }] },
@@ -76,23 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function showNameEntry() {
         document.getElementById('question-container').style.display = 'none';
         document.getElementById('name-entry').style.display = 'block';
-
+    
         document.getElementById('submit-name').addEventListener('click', () => {
             const testName = document.getElementById('test-taker-name').value.trim();
             if (!testName) {
                 alert("Please enter your name.");
                 return;
             }
+    
+            quizTakerCount++; // Increment the counter here
             displayResult(testName);
         });
     }
-
-    function getVisitorCount() {
-        const sheet = SpreadsheetApp.openById('1Y85tUj1fRef5CFIeS_l-XWnqMT0TRILAFLhJ0Tb4b_o').getActiveSheet();
-        const visitorCount = sheet.getRange('A1').getValue(); // Assuming the count is in cell A1
-        return visitorCount;
-      }
-      
 
     function displayResult(testTakerName) {
         const results = [
@@ -112,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
         overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
     }
+    
 
     function overlayNameOnImage(imagePath, testTakerName, imageLabel) {
         const resultContainer = document.getElementById('result');
@@ -135,9 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const xPositionTopLeft = 50;
             const yPositionTopLeft = 50;
             ctx.textAlign = 'left';
-            visitor = getVisitorCount()
-
-            ctx.fillText(`No: ${visitor}`, xPositionTopLeft, yPositionTopLeft);
+            ctx.fillText(`No. ${quizTakerCount}`, xPositionTopLeft, yPositionTopLeft); // Use the counter here
 
             // Add test-taker's name in the bottom-right of the first section
             const xPositionName = canvas.width - 50;
