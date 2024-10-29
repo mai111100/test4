@@ -2,10 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentQuestionIndex = 0;
     let selectedLanguage = null;
 
+    const storedCount = localStorage.getItem('quizTakerCount');
+    quizTakerCount = storedCount ? parseInt(storedCount, 10) : 0;
+
     // Scores for each personality (bird type)
     let weaverScore = 0, pelicanScore = 0, flycatcherScore = 0, owlScore = 0;
     let crowScore = 0, craneScore = 0, parakeetScore = 0, eagleScore = 0, pigeonScore = 0;
-    let quizTakerCount = 0;
     
     // English and Vietnamese questions
     const englishQuestions = [
@@ -85,10 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
     
-            quizTakerCount++; // Increment the counter here
+            quizTakerCount++; // Increment the counter
+            localStorage.setItem('quizTakerCount', quizTakerCount); // Store it in local storage
             displayResult(testName);
         });
     }
+    
 
     function displayResult(testTakerName) {
         const results = [
