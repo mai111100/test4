@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return visitorCount;
       }
 
-    function displayResult(testTakerName) {
+    function displayResult(testTakerName, visitorCount) {
             // Fetch visitor count from Google Sheets
         fetch('https://script.google.com/macros/s/AKfycbysJBbFrmbNy-RWFlXYOqMTxaCXGOz19EUVXyPq3vG-4oEAQatHlG_mwuKy3SQMq04L/exec') // Replace with your API URL to get the count
             .then(response => response.json())
