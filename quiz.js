@@ -1,10 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Track visitor count
-    const visitorCountURL = 'YOUR_GOOGLE_APPS_SCRIPT_URL'; // Replace with your web app URL
-    fetch(visitorCountURL + '?visitorCount=1')
-        .then(response => response.json())
-        .then(data => console.log('Visitor count recorded:', data.status))
-        .catch(error => console.error('Error recording visitor count:', error));
     let currentQuestionIndex = 0;
     let selectedLanguage = null;
 
@@ -89,93 +83,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Please enter your name.");
                 return;
             }
-            visitorCount = getVisitorCount();
-            displayResult(testName,visitorCount);
+            displayResult(testName);
         });
     }
 
-    function getVisitorCount() {
-        const sheet = SpreadsheetApp.openById('1Y85tUj1fRef5CFIeS_l-XWnqMT0TRILAFLhJ0Tb4b_o').getActiveSheet();
-        const visitorCount = sheet.getRange('A1').getValue(); // Assuming the count is in cell A1
-        return visitorCount;
-      }
-
-    function displayResult(testTakerName, visitorCount) {
-            // Fetch visitor count from Google Sheets
-        fetch('https://script.google.com/macros/s/AKfycbysJBbFrmbNy-RWFlXYOqMTxaCXGOz19EUVXyPq3vG-4oEAQatHlG_mwuKy3SQMq04L/exec') // Replace with your API URL to get the count
+    function fetchVisitorCount() {
+        return fetch('YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') // Replace with your Apps Script URL
             .then(response => response.json())
-            .then(visitorData => {
-                const visitorCount = visitorData.length; // Assuming each row is a visit
-                const message = `Congratulations, ${testTakerName}! You most resemble a ${topResult.type}. There have been ${visitorCount} visitors.`;
-                const resultContainer = document.getElementById('result');
-                resultContainer.insertAdjacentHTML('afterbegin', `<p>${message}</p>`);
-            })
-            .catch(error => console.error('Error fetching visitor count:', error));
-        // Track quiz completion event
-        gtag('event', 'quiz_completion', {
-            'event_category': 'Quiz',
-            'event_label': 'Enneagram Quiz',
-            'value': 1
-        });
-    
-        // Your existing result display code
+            .then(data => data.visitorCount) // Adjust according to how you send data from Apps Script
+            .catch(error => {
+                console.error('Error fetching visitor count:', error);
+                return 0; // Return 0 or a default value if there's an error
+            });
+    }
+
+    function displayResult(testTakerName) {
         const results = [
             { type: "weaver", score: weaverScore },
             { type: "pelican", score: pelicanScore },
             // ...add other types and their scores...
         ];
-    
-        // Sort and find the top result
+
         results.sort((a, b) => b.score - a.score);
         const topResult = results[0];
         const secondResult = results[1];
-    
+
         const potentialMatches = birdMatches[topResult.type];
         const birdMatch = potentialMatches.includes(secondResult.type) ? secondResult.type : potentialMatches[0];
-        
-        visitorCount = getVisitorCount()
 
         const languagePrefix = selectedLanguage === 'english' ? 'eng' : 'vie';
-        overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
-        overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
-        overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, visitorCount, 'VisitorCountImage');
-    }
 
-    function overlayVisitorCountOnImage(imagePath, visitorCount, imageLabel) {
-        const resultContainer = document.getElementById('result');
-        const image = new Image();
-        image.src = imagePath;
-        
-        image.onload = function() {
-            const canvas = document.createElement('canvas');
-            canvas.width = image.width;
-            canvas.height = image.height;
-            const ctx = canvas.getContext('2d');
-            
-            ctx.drawImage(image, 0, 0);
-            ctx.font = '20px Arial';
-            ctx.fillStyle = 'black'; // Set text color to black
-            ctx.textAlign = 'right';
-            
-            // Position the text in the bottom-right corner (adjust as needed)
-            const xPosition = canvas.width - 50; // 50px from the right edge
-            const yPosition = 355;                // Adjust y position as needed
-    
-            ctx.fillText(`Visitors: ${visitorCount}`, xPosition, yPosition);
-    
-            const finalImage = new Image();
-            finalImage.src = canvas.toDataURL('image/png');
-            resultContainer.appendChild(finalImage);
-    
-            const downloadBtn = document.createElement('a');
-            downloadBtn.href = finalImage.src;
-            downloadBtn.download = `${imageLabel.toLowerCase()}-${new Date().toISOString()}.png`;
-            downloadBtn.textContent = `Download ${imageLabel}`;
-            downloadBtn.style.display = 'block';
-            resultContainer.appendChild(downloadBtn);
-        };
-    
-        document.getElementById('result-container').style.display = 'block';
+        fetchVisitorCount().then(visitorCount => {
+            overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
+            overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
+            overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, visitorCount, 'VisitorCountImage');
+        });
     }
 
     function overlayNameOnImage(imagePath, testTakerName, imageLabel) {
@@ -206,6 +148,42 @@ document.addEventListener('DOMContentLoaded', () => {
             const downloadBtn = document.createElement('a');
             downloadBtn.href = finalImage.src;
             downloadBtn.download = `${imageLabel.toLowerCase()}-${testTakerName}.png`;
+            downloadBtn.textContent = `Download ${imageLabel}`;
+            downloadBtn.style.display = 'block';
+            resultContainer.appendChild(downloadBtn);
+        };
+
+        document.getElementById('result-container').style.display = 'block';
+    }
+
+    function overlayVisitorCountOnImage(imagePath, visitorCount, imageLabel) {
+        const resultContainer = document.getElementById('result');
+        const image = new Image();
+        image.src = imagePath;
+
+        image.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            const ctx = canvas.getContext('2d');
+
+            ctx.drawImage(image, 0, 0);
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'black';  // Set text color to black
+            ctx.textAlign = 'right';
+
+            // Position the text for visitor count
+            const xPosition = canvas.width - 50;  // 50px from the right edge
+            const yPosition = 380;                 // Adjust position as necessary
+            ctx.fillText(`Visitor Count: ${visitorCount}`, xPosition, yPosition);
+
+            const finalImage = new Image();
+            finalImage.src = canvas.toDataURL('image/png');
+            resultContainer.appendChild(finalImage);
+
+            const downloadBtn = document.createElement('a');
+            downloadBtn.href = finalImage.src;
+            downloadBtn.download = `${imageLabel.toLowerCase()}-${visitorCount}.png`;
             downloadBtn.textContent = `Download ${imageLabel}`;
             downloadBtn.style.display = 'block';
             resultContainer.appendChild(downloadBtn);
