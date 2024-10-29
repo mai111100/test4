@@ -104,7 +104,46 @@ document.addEventListener('DOMContentLoaded', () => {
         const languagePrefix = selectedLanguage === 'english' ? 'eng' : 'vie';
         overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
         overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
+        overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, 12345, 'VisitorCountImage');
     }
+
+    function overlayVisitorCountOnImage(imagePath, visitorCount, imageLabel) {
+        const resultContainer = document.getElementById('result');
+        const image = new Image();
+        image.src = imagePath;
+        
+        image.onload = function() {
+            const canvas = document.createElement('canvas');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.drawImage(image, 0, 0);
+            ctx.font = '20px Arial';
+            ctx.fillStyle = 'black'; // Set text color to black
+            ctx.textAlign = 'right';
+            
+            // Position the text in the bottom-right corner (adjust as needed)
+            const xPosition = canvas.width - 50; // 50px from the right edge
+            const yPosition = 355;                // Adjust y position as needed
+    
+            ctx.fillText(`Visitors: ${visitorCount}`, xPosition, yPosition);
+    
+            const finalImage = new Image();
+            finalImage.src = canvas.toDataURL('image/png');
+            resultContainer.appendChild(finalImage);
+    
+            const downloadBtn = document.createElement('a');
+            downloadBtn.href = finalImage.src;
+            downloadBtn.download = `${imageLabel.toLowerCase()}-${new Date().toISOString()}.png`;
+            downloadBtn.textContent = `Download ${imageLabel}`;
+            downloadBtn.style.display = 'block';
+            resultContainer.appendChild(downloadBtn);
+        };
+    
+        document.getElementById('result-container').style.display = 'block';
+    }
+    
 
     function overlayNameOnImage(imagePath, testTakerName, imageLabel) {
         const resultContainer = document.getElementById('result');
