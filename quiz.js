@@ -89,7 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Please enter your name.");
                 return;
             }
-            displayResult(testName);
+            visitorCount = getVisitorCount();
+            displayResult(testName,visitorCount);
         });
     }
 
