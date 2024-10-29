@@ -114,12 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const languagePrefix = selectedLanguage === 'english' ? 'eng' : 'vie';
 
-        fetchVisitorCount().then(visitorCount => {
-            overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
-            overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
-            overlayVisitorCountOnImage(`${languagePrefix}-match-${topResult.type}.png`, 124523, 'VisitorCountImage');
-            overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, 124523, 'VisitorCountImage');
-        });
     }
 
     function overlayNameOnImage(imagePath, testTakerName, imageLabel) {
