@@ -83,19 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert("Please enter your name.");
                 return;
             }
-
             displayResult(testName);
         });
-    }
-
-    function fetchVisitorCount() {
-        return fetch('https://script.google.com/macros/s/AKfycbysJBbFrmbNy-RWFlXYOqMTxaCXGOz19EUVXyPq3vG-4oEAQatHlG_mwuKy3SQMq04L/exec') // Replace with your Apps Script URL
-            .then(response => response.json())
-            .then(data => data.visitorCount) // Adjust according to how you send data from Apps Script
-            .catch(error => {
-                console.error('Error fetching visitor count:', error);
-                return 0; // Return 0 or a default value if there's an error
-            });
     }
 
     function displayResult(testTakerName) {
@@ -113,13 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const birdMatch = potentialMatches.includes(secondResult.type) ? secondResult.type : potentialMatches[0];
 
         const languagePrefix = selectedLanguage === 'english' ? 'eng' : 'vie';
-
-        fetchVisitorCount().then(visitorCount => {
-            overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
-            overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
-            overlayVisitorCountOnImage(`${languagePrefix}-match-${topResult.type}.png`, 124523, 'VisitorCountImage');
-            overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, 124523, 'VisitorCountImage');
-        });
+        overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
+        overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
     }
 
     function overlayNameOnImage(imagePath, testTakerName, imageLabel) {
@@ -150,42 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const downloadBtn = document.createElement('a');
             downloadBtn.href = finalImage.src;
             downloadBtn.download = `${imageLabel.toLowerCase()}-${testTakerName}.png`;
-            downloadBtn.textContent = `Download ${imageLabel}`;
-            downloadBtn.style.display = 'block';
-            resultContainer.appendChild(downloadBtn);
-        };
-
-        document.getElementById('result-container').style.display = 'block';
-    }
-
-    function overlayVisitorCountOnImage(imagePath, visitorCount, imageLabel) {
-        const resultContainer = document.getElementById('result');
-        const image = new Image();
-        image.src = imagePath;
-
-        image.onload = function() {
-            const canvas = document.createElement('canvas');
-            canvas.width = image.width;
-            canvas.height = image.height;
-            const ctx = canvas.getContext('2d');
-
-            ctx.drawImage(image, 0, 0);
-            ctx.font = '20px Arial';
-            ctx.fillStyle = 'black';  // Set text color to black
-            ctx.textAlign = 'right';
-
-            // Position the text for visitor count
-            const xPosition = canvas.width - 50;  // 50px from the right edge
-            const yPosition = 380;                 // Adjust position as necessary
-            ctx.fillText(`Visitor Count: ${visitorCount}`, xPosition, yPosition);
-
-            const finalImage = new Image();
-            finalImage.src = canvas.toDataURL('image/png');
-            resultContainer.appendChild(finalImage);
-
-            const downloadBtn = document.createElement('a');
-            downloadBtn.href = finalImage.src;
-            downloadBtn.download = `${imageLabel.toLowerCase()}-${visitorCount}.png`;
             downloadBtn.textContent = `Download ${imageLabel}`;
             downloadBtn.style.display = 'block';
             resultContainer.appendChild(downloadBtn);
