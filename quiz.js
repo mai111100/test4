@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchVisitorCount().then(visitorCount => {
             overlayNameOnImage(`${languagePrefix}-persona-${topResult.type}.png`, testTakerName, "Persona");
             overlayNameOnImage(`${languagePrefix}-match-${birdMatch}.png`, testTakerName, "Match");
+            overlayVisitorCountOnImage(`${languagePrefix}-match-${topResult.type}.png`, 124523, 'VisitorCountImage');
             overlayVisitorCountOnImage(`${languagePrefix}-match-${birdMatch}.png`, 124523, 'VisitorCountImage');
         });
     }
